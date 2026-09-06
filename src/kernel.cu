@@ -460,37 +460,22 @@ __global__ void kernUpdateVelNeighborSearchScattered(
   int gridCell = gridIndex3Dto1D(iX, iY, iZ, gridResolution);
 
   // Identify which cells may contain neighbors
-  float xOffset = fX - iX;
-  int minX = iX;
-  int maxX = iX;
+  float maxRuleDistance = imax(rule1Distance, imax(rule2Distance, rule3Distance));
+  
+  int minX = floor(fX - maxRuleDistance * inverseCellWidth);
+  int maxX = floor(fX + maxRuleDistance * inverseCellWidth);
+  minX = imax(minX, 0);
+  maxX = imin(maxX, gridResolution - 1);
 
-  if (xOffset < 0.5f) {
-    minX = imax(iX - 1, 0);
-  } else {
-    maxX = imin(iX + 1, gridResolution - 1);
-  }
+  int minY = floor(fY - maxRuleDistance * inverseCellWidth);
+  int maxY = floor(fY + maxRuleDistance * inverseCellWidth);
+  minY = imax(minY, 0);
+  maxY = imin(maxY, gridResolution - 1);
 
-  float yOffset = fY - iY;
-  int minY = iY;
-  int maxY = iY;
-
-  if (yOffset < 0.5f) {
-    minY = imax(iY - 1, 0);
-  }
-  else {
-    maxY = imin(iY + 1, gridResolution - 1);
-  }
-
-  float zOffset = fZ - iZ;
-  int minZ = iZ;
-  int maxZ = iZ;
-
-  if (zOffset < 0.5f) {
-    minZ = imax(iZ - 1, 0);
-  }
-  else {
-    maxZ = imin(iZ + 1, gridResolution - 1);
-  }
+  int minZ = floor(fZ - maxRuleDistance * inverseCellWidth);
+  int maxZ = floor(fZ + maxRuleDistance * inverseCellWidth);
+  minZ = imax(minZ, 0);
+  maxZ = imin(maxZ, gridResolution - 1);
 
   glm::vec3 rule1Vel = glm::vec3(0.0f, 0.0f, 0.0f);
   glm::vec3 rule2Vel = glm::vec3(0.0f, 0.0f, 0.0f);
