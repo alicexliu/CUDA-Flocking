@@ -50,7 +50,7 @@ No visualization has a consistently better framerate than with visualization. Th
   <img src="images/fps_block_size_graph.png" width="600"><br>
 </p>
 
-I tested this with the Coherent implementation, 50k boids, and with visualization on. From the data, it looks like changing block size does not have a huge impact on performance. This is because the boid simulation is memory-bound rather than compute-bound. However, 512 seems to be the peak from the data. 
+I tested this with the Coherent implementation, 50k boids, and with visualization on. From the data, it looks like changing block size does not have a huge impact on performance. This is because the boid simulation is memory-bound rather than compute-bound. However, 512 seems to be the peak. 
 
 ### Framerate with Changing Cell Width
 I tested this with the Coherent implementation, 50k boids, and with visualization on. Changing cell width and checking 27 vs 8 neighboring cells did have an effect on performance, but not in the way I would have thought. Checking 27 gave me a performance of 1031.07 FPS while checking 8 gave me a performance of 930.69 FPS. This is likely due to that fact that even though there are more cells to check, the volume of each cell is smaller, so there can be less boids within the 27 to check.
