@@ -8,7 +8,7 @@ Project 1 - Flocking**
 ## CUDA Boid Flocking
 <p align="center">
   <img src="images/boids_17k.gif" width="800"><br>
-  <sub>Coherent Uniform Grid Implemention with 17,000 Boids</sub>
+  Coherent Uniform Grid Implemention with 17,000 Boids
 </p>
 
 ## Overview
