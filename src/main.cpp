@@ -27,7 +27,7 @@
 #define COHERENT_GRID 1
 
 // LOOK-1.2 - change this to adjust particle count in the simulation
-const int N_FOR_VIS = 5000;
+const int N_FOR_VIS = 50000;
 const float DT = 0.2f;
 
 /**
@@ -222,6 +222,15 @@ void initShaders(GLuint * program) {
   }
 
   void mainLoop() {
+    // benchmarking variables
+    bool isBenchmarking = true;
+    bool hasWarmedUp = false;
+    double benchmarkStartTime = 0.0;
+    int frameCount = 0;
+
+    const double WARMUP_TIME = 2.0;
+    const double BENCHMARK_DURATION = 20.0; 
+
     double fps = 0;
     double timebase = 0;
     int frame = 0;
@@ -264,6 +273,37 @@ void initShaders(GLuint * program) {
 
       glfwSwapBuffers(window);
       #endif
+
+      if (isBenchmarking) {
+        double currentTime = glfwGetTime();
+
+        // 1. Warm-up Phase
+        if (!hasWarmedUp) {
+          if (currentTime > WARMUP_TIME) {
+            hasWarmedUp = true;
+            benchmarkStartTime = currentTime; // Start the official timer
+            frameCount = 0;
+            std::cout << "Starting 20-second FPS benchmark..." << std::endl;
+          }
+        }
+        // 2. Benchmarking Phase
+        else {
+          frameCount++;
+          double elapsedBenchmarkTime = currentTime - benchmarkStartTime;
+
+          if (elapsedBenchmarkTime >= BENCHMARK_DURATION) {
+            double averageFPS = frameCount / elapsedBenchmarkTime;
+
+            std::cout << "====================================" << std::endl;
+            std::cout << "Benchmark Complete!" << std::endl;
+            std::cout << "Total Frames: " << frameCount << std::endl;
+            std::cout << "Average FPS: " << averageFPS << std::endl;
+            std::cout << "====================================" << std::endl;
+
+            isBenchmarking = false; // Stop benchmarking so it only prints once
+          }
+        }
+      }
     }
     glfwDestroyWindow(window);
     glfwTerminate();
